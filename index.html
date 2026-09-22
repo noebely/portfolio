@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noé Bély — Portfolio</title>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Noé Bély — Portfolio</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
 background-color: #000000;
 scroll-behavior: smooth;
+width: 100%;
+overflow-x: hidden;
 }
 
 .gallery {
@@ -24,7 +16,7 @@ flex-direction: column;
 
 .slide {
 width: 100%;
-height: 100vh;
+height: 100dvh;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -35,14 +27,14 @@ overflow: hidden;
 width: 100%;
 height: 100%;
 object-fit: contain;
-} </style>
+display: block;
+}
+</style>
 
-</head>
-<body>
+</head> <body>
 
-  <div class="gallery">
+<div class="gallery">
 
-```
 <div class="slide">
   <img src="images/image1.jpg" alt="Projet 1">
 </div>
@@ -102,9 +94,7 @@ object-fit: contain;
 <div class="slide">
   <img src="images/image15.jpg" alt="Projet 15">
 </div>
-```
 
-  </div>
+</div>
 
-</body>
-</html>
+</body> </html>
