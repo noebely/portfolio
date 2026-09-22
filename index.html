@@ -1,39 +1,14 @@
 <!DOCTYPE html>
 
-<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Noé Bély — Portfolio</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
+<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Noé Bély — Portfolio</title>
 
-html, body {
-background-color: #000000;
-scroll-behavior: smooth;
-width: 100%;
-overflow-x: hidden;
-}
+<style> * { margin: 0; padding: 0; box-sizing: border-box; } html, body { width: 100%; height: 100%; background-color: #000000; overflow: hidden; } .gallery { display: flex; width: 100%; height: 100dvh; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; } .gallery::-webkit-scrollbar { display: none; } .slide { flex: 0 0 100vw; width: 100vw; height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; scroll-snap-align: start; } .slide img { width: 100%; height: 100%; object-fit: contain; display: block; } /* Flèches */ .arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 10; width: 60px; height: 100px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: rgba(255, 255, 255, 0.7); font-size: 45px; font-family: Arial, sans-serif; cursor: pointer; transition: opacity 0.2s ease; } .arrow:hover { color: rgba(255, 255, 255, 1); } .arrow-left { left: 10px; } .arrow-right { right: 10px; } .arrow.hidden { opacity: 0; pointer-events: none; } </style>
 
-.gallery {
-display: flex;
-flex-direction: column;
-}
+</head>
 
-.slide {
-width: 100%;
-height: 100dvh;
-display: flex;
-align-items: center;
-justify-content: center;
-overflow: hidden;
-}
+<body>
 
-.slide img {
-width: 100%;
-height: 100%;
-object-fit: contain;
-display: block;
-}
-</style>
-
-</head> <body>
-
-<div class="gallery">
+<div class="gallery" id="gallery">
 
 <div class="slide">
   <img src="images/image1.jpg" alt="Projet 1">
@@ -96,5 +71,10 @@ display: block;
 </div>
 
 </div>
+
+<button class="arrow arrow-left" id="left">‹</button>
+<button class="arrow arrow-right" id="right">›</button>
+
+<script> const gallery = document.getElementById("gallery"); const left = document.getElementById("left"); const right = document.getElementById("right"); function updateArrows() { const maxScroll = gallery.scrollWidth - gallery.clientWidth; left.classList.toggle("hidden", gallery.scrollLeft <= 5); right.classList.toggle("hidden", gallery.scrollLeft >= maxScroll - 5); } right.addEventListener("click", () => { gallery.scrollBy({ left: window.innerWidth, behavior: "smooth" }); }); left.addEventListener("click", () => { gallery.scrollBy({ left: -window.innerWidth, behavior: "smooth" }); }); gallery.addEventListener("scroll", updateArrows); updateArrows(); </script>
 
 </body> </html>
