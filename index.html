@@ -1,36 +1,315 @@
 <!DOCTYPE html>
 
-<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Noé Bély — Portfolio</title>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noé Bély — Portfolio</title>
 
-<style> * { margin: 0; padding: 0; box-sizing: border-box; } html, body { width: 100%; height: 100%; background-color: #000000; overflow: hidden; } .gallery { display: flex; width: 100%; height: 100dvh; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; } .gallery::-webkit-scrollbar { display: none; } .slide { flex: 0 0 100vw; width: 100vw; height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; scroll-snap-align: start; } .slide img { width: 100%; height: 100%; object-fit: contain; display: block; } /* Flèches */ .arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 10; width: 90px; height: 130px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: rgba(255, 255, 255, 0.75); font-size: 70px; font-family: Arial, sans-serif; font-weight: 300; cursor: pointer; transition: opacity 0.2s ease, color 0.2s ease; } .arrow:hover { color: rgba(255, 255, 255, 1); } .arrow-left { left: 10px; } .arrow-right { right: 10px; } .arrow.hidden { opacity: 0; pointer-events: none; } </style>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    overflow: hidden;
+  }
+
+  .gallery {
+    display: flex;
+    width: 100%;
+    height: 100dvh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slide {
+    flex: 0 0 100vw;
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* =========================
+     FLÈCHES
+     ========================= */
+
+  .arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    width: 90px;
+    height: 130px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: none;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 70px;
+    font-family: Arial, sans-serif;
+    font-weight: 300;
+
+    cursor: pointer;
+
+    transition:
+      opacity 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .arrow:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .arrow-left {
+    left: 10px;
+  }
+
+  .arrow-right {
+    right: 10px;
+  }
+
+  .arrow.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
 
 </head>
 
 <body>
 
-<div class="gallery" id="gallery">
+  <div class="gallery" id="gallery">
 
-<div class="slide"><img src="images/image1.jpg" alt="Projet 1"></div>
-<div class="slide"><img src="images/image2.jpg" alt="Projet 2"></div>
-<div class="slide"><img src="images/image3.jpg" alt="Projet 3"></div>
-<div class="slide"><img src="images/image4.jpg" alt="Projet 4"></div>
-<div class="slide"><img src="images/image5.jpg" alt="Projet 5"></div>
-<div class="slide"><img src="images/image6.jpg" alt="Projet 6"></div>
-<div class="slide"><img src="images/image7.jpg" alt="Projet 7"></div>
-<div class="slide"><img src="images/image8.jpg" alt="Projet 8"></div>
-<div class="slide"><img src="images/image9.jpg" alt="Projet 9"></div>
-<div class="slide"><img src="images/image10.jpg" alt="Projet 10"></div>
-<div class="slide"><img src="images/image11.jpg" alt="Projet 11"></div>
-<div class="slide"><img src="images/image12.jpg" alt="Projet 12"></div>
-<div class="slide"><img src="images/image13.jpg" alt="Projet 13"></div>
-<div class="slide"><img src="images/image14.jpg" alt="Projet 14"></div>
-<div class="slide"><img src="images/image15.jpg" alt="Projet 15"></div>
-
+```
+<div class="slide">
+  <img src="images/image1.jpg" alt="Projet 1">
 </div>
 
-<button class="arrow arrow-left" id="left">‹</button>
-<button class="arrow arrow-right" id="right">›</button>
+<div class="slide">
+  <img src="images/image2.jpg" alt="Projet 2">
+</div>
 
-<script> const gallery = document.getElementById("gallery"); const left = document.getElementById("left"); const right = document.getElementById("right"); function updateArrows() { const maxScroll = gallery.scrollWidth - gallery.clientWidth; left.classList.toggle("hidden", gallery.scrollLeft <= 5); right.classList.toggle("hidden", gallery.scrollLeft >= maxScroll - 5); } function nextSlide() { gallery.scrollBy({ left: window.innerWidth, behavior: "smooth" }); } function previousSlide() { gallery.scrollBy({ left: -window.innerWidth, behavior: "smooth" }); } right.addEventListener("click", () => { nextSlide(); right.blur(); }); left.addEventListener("click", () => { previousSlide(); left.blur(); }); /* Navigation au clavier */ document.addEventListener("keydown", (event) => { if (event.key === "ArrowRight") { event.preventDefault(); nextSlide(); } if (event.key === "ArrowLeft") { event.preventDefault(); previousSlide(); } }); gallery.addEventListener("scroll", updateArrows); updateArrows(); </script>
+<div class="slide">
+  <img src="images/image3.jpg" alt="Projet 3">
+</div>
 
-</body> </html>
+<div class="slide">
+  <img src="images/image4.jpg" alt="Projet 4">
+</div>
+
+<div class="slide">
+  <img src="images/image5.jpg" alt="Projet 5">
+</div>
+
+<div class="slide">
+  <img src="images/image6.jpg" alt="Projet 6">
+</div>
+
+<div class="slide">
+  <img src="images/image7.jpg" alt="Projet 7">
+</div>
+
+<div class="slide">
+  <img src="images/image8.jpg" alt="Projet 8">
+</div>
+
+<div class="slide">
+  <img src="images/image9.jpg" alt="Projet 9">
+</div>
+
+<div class="slide">
+  <img src="images/image10.jpg" alt="Projet 10">
+</div>
+
+<div class="slide">
+  <img src="images/image11.jpg" alt="Projet 11">
+</div>
+
+<div class="slide">
+  <img src="images/image12.jpg" alt="Projet 12">
+</div>
+
+<div class="slide">
+  <img src="images/image13.jpg" alt="Projet 13">
+</div>
+
+<div class="slide">
+  <img src="images/image14.jpg" alt="Projet 14">
+</div>
+
+<div class="slide">
+  <img src="images/image15.jpg" alt="Projet 15">
+</div>
+```
+
+  </div>
+
+  <!-- FLÈCHES -->
+
+  <button class="arrow arrow-left" id="left" aria-label="Image précédente">
+    ‹
+  </button>
+
+  <button class="arrow arrow-right" id="right" aria-label="Image suivante">
+    ›
+  </button>
+
+<script>
+
+  const gallery = document.getElementById("gallery");
+  const left = document.getElementById("left");
+  const right = document.getElementById("right");
+
+
+  /* =========================
+     AFFICHAGE DES FLÈCHES
+     ========================= */
+
+  function updateArrows() {
+
+    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+
+    /* Flèche gauche :
+       cachée au début */
+    left.classList.toggle(
+      "hidden",
+      gallery.scrollLeft <= 5
+    );
+
+    /* Flèche droite :
+       visible dès le début,
+       cachée uniquement à la fin */
+    right.classList.toggle(
+      "hidden",
+      gallery.scrollLeft >= maxScroll - 5
+    );
+  }
+
+
+  /* =========================
+     NAVIGATION
+     ========================= */
+
+  function nextSlide() {
+
+    gallery.scrollBy({
+      left: window.innerWidth,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  function previousSlide() {
+
+    gallery.scrollBy({
+      left: -window.innerWidth,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  /* =========================
+     CLIC SUR LES FLÈCHES
+     ========================= */
+
+  right.addEventListener("click", () => {
+
+    nextSlide();
+
+    /* Retire le focus du bouton
+       pour que le clavier continue
+       de contrôler la galerie */
+    right.blur();
+
+  });
+
+
+  left.addEventListener("click", () => {
+
+    previousSlide();
+
+    left.blur();
+
+  });
+
+
+  /* =========================
+     CLAVIER ← →
+     ========================= */
+
+  document.addEventListener("keydown", (event) => {
+
+    if (event.key === "ArrowRight") {
+
+      event.preventDefault();
+
+      nextSlide();
+
+    }
+
+    if (event.key === "ArrowLeft") {
+
+      event.preventDefault();
+
+      previousSlide();
+
+    }
+
+  });
+
+
+  /* =========================
+     MISE À JOUR DES FLÈCHES
+     ========================= */
+
+  gallery.addEventListener(
+    "scroll",
+    updateArrows
+  );
+
+
+  /* Attend que les images soient
+     chargées avant de calculer
+     la position des flèches */
+
+  window.addEventListener(
+    "load",
+    updateArrows
+  );
+
+</script>
+
+</body>
+</html>
