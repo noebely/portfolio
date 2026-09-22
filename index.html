@@ -36,6 +36,7 @@
   }
 
   .slide {
+    position: relative;
     flex: 0 0 100vw;
     width: 100vw;
     height: 100dvh;
@@ -51,6 +52,32 @@
     height: 100%;
     object-fit: contain;
     display: block;
+  }
+
+  /* =========================
+     LIEN SLIDE 5
+     ========================= */
+
+  .film-link {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+
+    text-decoration: underline;
+
+    z-index: 5;
+    white-space: nowrap;
+
+    transition: opacity 0.2s ease;
+  }
+
+  .film-link:hover {
+    opacity: 0.7;
   }
 
   /* =========================
@@ -111,26 +138,95 @@
   <div class="gallery" id="gallery">
 
 ```
-<div class="slide"><img src="images/image1.jpg" alt="Projet 1"></div>
-<div class="slide"><img src="images/image2.jpg" alt="Projet 2"></div>
-<div class="slide"><img src="images/image3.jpg" alt="Projet 3"></div>
-<div class="slide"><img src="images/image4.jpg" alt="Projet 4"></div>
-<div class="slide"><img src="images/image5.jpg" alt="Projet 5"></div>
-<div class="slide"><img src="images/image6.jpg" alt="Projet 6"></div>
-<div class="slide"><img src="images/image7.jpg" alt="Projet 7"></div>
-<div class="slide"><img src="images/image8.jpg" alt="Projet 8"></div>
-<div class="slide"><img src="images/image9.jpg" alt="Projet 9"></div>
-<div class="slide"><img src="images/image10.jpg" alt="Projet 10"></div>
-<div class="slide"><img src="images/image11.jpg" alt="Projet 11"></div>
-<div class="slide"><img src="images/image12.jpg" alt="Projet 12"></div>
-<div class="slide"><img src="images/image13.jpg" alt="Projet 13"></div>
-<div class="slide"><img src="images/image14.jpg" alt="Projet 14"></div>
-<div class="slide"><img src="images/image15.jpg" alt="Projet 15"></div>
+<div class="slide">
+  <img src="images/image1.jpg" alt="Projet 1">
+</div>
+
+<div class="slide">
+  <img src="images/image2.jpg" alt="Projet 2">
+</div>
+
+<div class="slide">
+  <img src="images/image3.jpg" alt="Projet 3">
+</div>
+
+<div class="slide">
+  <img src="images/image4.jpg" alt="Projet 4">
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide">
+
+  <img src="images/image5.jpg" alt="Projet 5">
+
+  <a
+    class="film-link"
+    href="https://filmfreeway.com/Option4"
+    target="_blank"
+    rel="noopener noreferrer">
+    https://filmfreeway.com/Option4
+  </a>
+
+</div>
+
+<div class="slide">
+  <img src="images/image6.jpg" alt="Projet 6">
+</div>
+
+<div class="slide">
+  <img src="images/image7.jpg" alt="Projet 7">
+</div>
+
+<div class="slide">
+  <img src="images/image8.jpg" alt="Projet 8">
+</div>
+
+<div class="slide">
+  <img src="images/image9.jpg" alt="Projet 9">
+</div>
+
+<div class="slide">
+  <img src="images/image10.jpg" alt="Projet 10">
+</div>
+
+<div class="slide">
+  <img src="images/image11.jpg" alt="Projet 11">
+</div>
+
+<div class="slide">
+  <img src="images/image12.jpg" alt="Projet 12">
+</div>
+
+<div class="slide">
+  <img src="images/image13.jpg" alt="Projet 13">
+</div>
+
+<div class="slide">
+  <img src="images/image14.jpg" alt="Projet 14">
+</div>
+
+<div class="slide">
+  <img src="images/image15.jpg" alt="Projet 15">
+</div>
 ```
 
   </div>
 
-<button class="arrow arrow-left" id="left" aria-label="Image précédente">‹</button> <button class="arrow arrow-right" id="right" aria-label="Image suivante">›</button>
+  <!-- =========================
+       FLÈCHES
+       ========================= -->
+
+<button
+ class="arrow arrow-left"
+ id="left"
+ aria-label="Image précédente">
+‹ </button>
+
+<button
+ class="arrow arrow-right"
+ id="right"
+ aria-label="Image suivante">
+› </button>
 
 <script>
 
@@ -184,7 +280,7 @@
 
 
   /* =========================
-     ALLER À L'IMAGE SUIVANTE
+     IMAGE SUIVANTE
      ========================= */
 
   function nextSlide() {
@@ -204,7 +300,7 @@
 
 
   /* =========================
-     ALLER À L'IMAGE PRÉCÉDENTE
+     IMAGE PRÉCÉDENTE
      ========================= */
 
   function previousSlide() {
