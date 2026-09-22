@@ -111,84 +111,48 @@
   <div class="gallery" id="gallery">
 
 ```
-<div class="slide">
-  <img src="images/image1.jpg" alt="Projet 1">
-</div>
-
-<div class="slide">
-  <img src="images/image2.jpg" alt="Projet 2">
-</div>
-
-<div class="slide">
-  <img src="images/image3.jpg" alt="Projet 3">
-</div>
-
-<div class="slide">
-  <img src="images/image4.jpg" alt="Projet 4">
-</div>
-
-<div class="slide">
-  <img src="images/image5.jpg" alt="Projet 5">
-</div>
-
-<div class="slide">
-  <img src="images/image6.jpg" alt="Projet 6">
-</div>
-
-<div class="slide">
-  <img src="images/image7.jpg" alt="Projet 7">
-</div>
-
-<div class="slide">
-  <img src="images/image8.jpg" alt="Projet 8">
-</div>
-
-<div class="slide">
-  <img src="images/image9.jpg" alt="Projet 9">
-</div>
-
-<div class="slide">
-  <img src="images/image10.jpg" alt="Projet 10">
-</div>
-
-<div class="slide">
-  <img src="images/image11.jpg" alt="Projet 11">
-</div>
-
-<div class="slide">
-  <img src="images/image12.jpg" alt="Projet 12">
-</div>
-
-<div class="slide">
-  <img src="images/image13.jpg" alt="Projet 13">
-</div>
-
-<div class="slide">
-  <img src="images/image14.jpg" alt="Projet 14">
-</div>
-
-<div class="slide">
-  <img src="images/image15.jpg" alt="Projet 15">
-</div>
+<div class="slide"><img src="images/image1.jpg" alt="Projet 1"></div>
+<div class="slide"><img src="images/image2.jpg" alt="Projet 2"></div>
+<div class="slide"><img src="images/image3.jpg" alt="Projet 3"></div>
+<div class="slide"><img src="images/image4.jpg" alt="Projet 4"></div>
+<div class="slide"><img src="images/image5.jpg" alt="Projet 5"></div>
+<div class="slide"><img src="images/image6.jpg" alt="Projet 6"></div>
+<div class="slide"><img src="images/image7.jpg" alt="Projet 7"></div>
+<div class="slide"><img src="images/image8.jpg" alt="Projet 8"></div>
+<div class="slide"><img src="images/image9.jpg" alt="Projet 9"></div>
+<div class="slide"><img src="images/image10.jpg" alt="Projet 10"></div>
+<div class="slide"><img src="images/image11.jpg" alt="Projet 11"></div>
+<div class="slide"><img src="images/image12.jpg" alt="Projet 12"></div>
+<div class="slide"><img src="images/image13.jpg" alt="Projet 13"></div>
+<div class="slide"><img src="images/image14.jpg" alt="Projet 14"></div>
+<div class="slide"><img src="images/image15.jpg" alt="Projet 15"></div>
 ```
 
   </div>
 
-  <!-- FLÈCHES -->
-
-  <button class="arrow arrow-left" id="left" aria-label="Image précédente">
-    ‹
-  </button>
-
-  <button class="arrow arrow-right" id="right" aria-label="Image suivante">
-    ›
-  </button>
+<button class="arrow arrow-left" id="left" aria-label="Image précédente">‹</button> <button class="arrow arrow-right" id="right" aria-label="Image suivante">›</button>
 
 <script>
 
   const gallery = document.getElementById("gallery");
   const left = document.getElementById("left");
   const right = document.getElementById("right");
+
+  const slides = document.querySelectorAll(".slide");
+  const totalSlides = slides.length;
+
+
+  /* =========================
+     POSITION ACTUELLE
+     ========================= */
+
+  function getCurrentSlide() {
+
+    return Math.round(
+      gallery.scrollLeft / gallery.clientWidth
+    );
+
+  }
 
 
   /* =========================
@@ -197,45 +161,64 @@
 
   function updateArrows() {
 
-    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+    const currentSlide = getCurrentSlide();
 
-    /* Flèche gauche :
-       cachée au début */
+    /* Première image :
+       pas de flèche gauche */
+
     left.classList.toggle(
       "hidden",
-      gallery.scrollLeft <= 5
+      currentSlide === 0
     );
 
-    /* Flèche droite :
-       visible dès le début,
-       cachée uniquement à la fin */
+
+    /* Dernière image :
+       pas de flèche droite */
+
     right.classList.toggle(
       "hidden",
-      gallery.scrollLeft >= maxScroll - 5
+      currentSlide === totalSlides - 1
     );
+
   }
 
 
   /* =========================
-     NAVIGATION
+     ALLER À L'IMAGE SUIVANTE
      ========================= */
 
   function nextSlide() {
 
-    gallery.scrollBy({
-      left: window.innerWidth,
-      behavior: "smooth"
-    });
+    const currentSlide = getCurrentSlide();
+
+    if (currentSlide < totalSlides - 1) {
+
+      gallery.scrollTo({
+        left: (currentSlide + 1) * gallery.clientWidth,
+        behavior: "smooth"
+      });
+
+    }
 
   }
 
 
+  /* =========================
+     ALLER À L'IMAGE PRÉCÉDENTE
+     ========================= */
+
   function previousSlide() {
 
-    gallery.scrollBy({
-      left: -window.innerWidth,
-      behavior: "smooth"
-    });
+    const currentSlide = getCurrentSlide();
+
+    if (currentSlide > 0) {
+
+      gallery.scrollTo({
+        left: (currentSlide - 1) * gallery.clientWidth,
+        behavior: "smooth"
+      });
+
+    }
 
   }
 
@@ -248,9 +231,6 @@
 
     nextSlide();
 
-    /* Retire le focus du bouton
-       pour que le clavier continue
-       de contrôler la galerie */
     right.blur();
 
   });
@@ -300,9 +280,9 @@
   );
 
 
-  /* Attend que les images soient
-     chargées avant de calculer
-     la position des flèches */
+  /* =========================
+     CHARGEMENT INITIAL
+     ========================= */
 
   window.addEventListener(
     "load",
