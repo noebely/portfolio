@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noé Bély — Portfolio</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    background-color: #000000;
+    scroll-behavior: smooth;
+  }
+
+  .gallery {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Petit indicateur discret en haut à gauche */
+  .brand {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="brand">NOÉ BÉLY</div>
+
+  <div class="gallery">
+
+    <div class="slide">
+      <img src="images/image1.jpg" alt="Projet 1">
+    </div>
+
+    <div class="slide">
+      <img src="images/image2.jpg" alt="Projet 2">
+    </div>
+
+    <div class="slide">
+      <img src="images/image3.jpg" alt="Projet 3">
+    </div>
+
+    <!-- Pour ajouter plus d'images, copie un bloc comme ci-dessus
+         et change le nom du fichier (image4.jpg, image5.jpg, etc.) -->
+
+  </div>
+
+</body>
+</html>
