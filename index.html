@@ -8,7 +8,17 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS officielle PDF.js pour la TextLayer -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf_viewer.min.css"
+  >
 
   <style>
 
@@ -22,7 +32,7 @@
     body {
       width: 100%;
       height: 100%;
-      background: #000;
+      background-color: #000;
       overflow: hidden;
     }
 
@@ -32,7 +42,6 @@
 
     .gallery {
       display: flex;
-
       width: 100%;
       height: 100dvh;
 
@@ -48,6 +57,7 @@
     .gallery::-webkit-scrollbar {
       display: none;
     }
+
 
     /* =========================
        SLIDES
@@ -70,22 +80,30 @@
       scroll-snap-align: start;
     }
 
+
     /* =========================
-       PDF
+       CONTENEUR PDF
        ========================= */
 
     .pdf-container {
       position: relative;
 
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100dvh;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       overflow: hidden;
+
+      background: #000;
     }
+
+
+    /* =========================
+       PAGE PDF
+       ========================= */
 
     .pdf-page {
       position: relative;
@@ -93,17 +111,30 @@
       flex: 0 0 auto;
 
       overflow: hidden;
+
+      background: #fff;
+
+      line-height: 0;
     }
+
+
+    /* =========================
+       CANVAS
+       ========================= */
 
     .pdf-page canvas {
       display: block;
 
       margin: 0;
       padding: 0;
+
+      max-width: none;
+      max-height: none;
     }
 
+
     /* =========================
-       TEXT LAYER PDF.JS
+       TEXT LAYER
        ========================= */
 
     .textLayer {
@@ -116,38 +147,20 @@
 
       overflow: hidden;
 
-      line-height: 1;
-
       text-align: initial;
 
       forced-color-adjust: none;
 
-      transform-origin: 0 0;
-
       z-index: 2;
 
       pointer-events: auto;
+
+      --total-scale-factor: 1;
     }
 
-    .textLayer span,
-    .textLayer br {
-      color: transparent;
-
-      position: absolute;
-
-      white-space: pre;
-
-      cursor: text;
-
-      transform-origin: 0% 0%;
-    }
-
-    .textLayer span::selection {
-      background: rgba(0, 100, 255, 0.3);
-    }
 
     /* =========================
-       LIENS PDF
+       ANNOTATION / LIENS PDF
        ========================= */
 
     .annotationLayer {
@@ -174,6 +187,7 @@
 
       text-decoration: none;
     }
+
 
     /* =========================
        FLÈCHES
@@ -346,8 +360,7 @@
     import {
       getDocument,
       GlobalWorkerOptions,
-      TextLayer,
-      Util
+      TextLayer
     } from
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs";
 
@@ -362,36 +375,29 @@
 
     async function loadPDF(container) {
 
-      const url =
-        container.dataset.pdf;
-
+      const url = container.dataset.pdf;
 
       const pdf =
         await getDocument(url).promise;
 
-
       /*
-        On utilise la première page
-        de chaque PDF.
+        On utilise uniquement la première page,
+        comme dans la version précédente.
       */
 
       const page =
         await pdf.getPage(1);
 
 
-      /*
-        Taille originale du PDF
-      */
+      /* =========================================
+         CALCUL DU SCALE
+         ========================================= */
 
       const baseViewport =
         page.getViewport({
           scale: 1
         });
 
-
-      /*
-        Taille disponible à l'écran
-      */
 
       const availableWidth =
         window.innerWidth;
@@ -400,20 +406,19 @@
         window.innerHeight;
 
 
-      /*
-        Calcul du zoom.
-        Le PDF tient entièrement
-        dans l'écran.
-      */
-
       const scaleX =
         availableWidth /
         baseViewport.width;
+
 
       const scaleY =
         availableHeight /
         baseViewport.height;
 
+
+      /*
+        Le PDF tient entièrement dans l'écran.
+      */
 
       const scale =
         Math.min(
@@ -424,9 +429,8 @@
 
       /*
         IMPORTANT :
-        exactement le même viewport
-        est utilisé pour le canvas
-        ET pour la TextLayer.
+        ce viewport est utilisé
+        pour le canvas ET la TextLayer.
       */
 
       const viewport =
@@ -435,9 +439,9 @@
         });
 
 
-      /*
-        Conteneur de la page
-      */
+      /* =========================================
+         CONTENEUR DE PAGE
+         ========================================= */
 
       const pageContainer =
         document.createElement("div");
@@ -447,18 +451,16 @@
 
 
       pageContainer.style.width =
-        Math.ceil(viewport.width) + "px";
+        viewport.width + "px";
 
 
       pageContainer.style.height =
-        Math.ceil(viewport.height) + "px";
+        viewport.height + "px";
 
 
-      /*
-        =========================
-        CANVAS
-        =========================
-      */
+      /* =========================================
+         CANVAS
+         ========================================= */
 
       const canvas =
         document.createElement("canvas");
@@ -472,26 +474,37 @@
         window.devicePixelRatio || 1;
 
 
+      /*
+        Résolution interne du canvas.
+        Cela améliore la netteté sans modifier
+        ses dimensions visuelles.
+      */
+
       canvas.width =
-        Math.ceil(
+        Math.floor(
           viewport.width *
           outputScale
         );
 
 
       canvas.height =
-        Math.ceil(
+        Math.floor(
           viewport.height *
           outputScale
         );
 
 
+      /*
+        Dimensions CSS EXACTEMENT identiques
+        au viewport PDF.
+      */
+
       canvas.style.width =
-        Math.ceil(viewport.width) + "px";
+        viewport.width + "px";
 
 
       canvas.style.height =
-        Math.ceil(viewport.height) + "px";
+        viewport.height + "px";
 
 
       pageContainer.appendChild(
@@ -499,18 +512,25 @@
       );
 
 
-      /*
-        =========================
-        TEXT LAYER
-        =========================
-      */
+      /* =========================================
+         TEXT LAYER
+         ========================================= */
 
       const textLayerDiv =
         document.createElement("div");
 
-
       textLayerDiv.className =
         "textLayer";
+
+
+      /*
+        IMPORTANT POUR PDF.JS 5.x
+      */
+
+      textLayerDiv.style.setProperty(
+        "--total-scale-factor",
+        viewport.scale
+      );
 
 
       pageContainer.appendChild(
@@ -518,15 +538,12 @@
       );
 
 
-      /*
-        =========================
-        ANNOTATION LAYER
-        =========================
-      */
+      /* =========================================
+         ANNOTATION LAYER
+         ========================================= */
 
       const annotationLayer =
         document.createElement("div");
-
 
       annotationLayer.className =
         "annotationLayer";
@@ -537,23 +554,29 @@
       );
 
 
-      /*
-        Ajout de la page
-        dans la slide.
-      */
-
       container.appendChild(
         pageContainer
       );
 
 
-      /*
-        =========================
-        RENDU CANVAS
-        =========================
-      */
+      /* =========================================
+         RENDU DU CANVAS
+         ========================================= */
 
-      const renderContext = {
+      const transform =
+        outputScale !== 1
+          ? [
+              outputScale,
+              0,
+              0,
+              outputScale,
+              0,
+              0
+            ]
+          : null;
+
+
+      await page.render({
 
         canvasContext:
           context,
@@ -562,30 +585,14 @@
           viewport,
 
         transform:
-          outputScale !== 1
-            ? [
-                outputScale,
-                0,
-                0,
-                outputScale,
-                0,
-                0
-              ]
-            : null
+          transform
 
-      };
+      }).promise;
 
 
-      await page.render(
-        renderContext
-      ).promise;
-
-
-      /*
-        =========================
-        RENDU TEXT LAYER
-        =========================
-      */
+      /* =========================================
+         RENDU DU TEXTE
+         ========================================= */
 
       const textContent =
         await page.getTextContent();
@@ -609,11 +616,9 @@
       await textLayer.render();
 
 
-      /*
-        =========================
-        LIENS PDF
-        =========================
-      */
+      /* =========================================
+         LIENS PRÉSENTS DANS LE PDF
+         ========================================= */
 
       const annotations =
         await page.getAnnotations();
@@ -630,47 +635,49 @@
           }
 
 
+          if (
+            !annotation.rect
+          ) {
+            return;
+          }
+
+
           /*
-            Coordonnées du lien
+            Conversion des coordonnées PDF
+            vers les coordonnées écran.
           */
 
           const rect =
-            Util.normalizeRect(
+            viewport.convertToViewportRectangle(
               annotation.rect
             );
 
 
-          const viewportRect =
-            viewport.convertToViewportRectangle(
-              rect
+          const left =
+            Math.min(
+              rect[0],
+              rect[2]
             );
 
 
-          const x1 =
+          const top =
             Math.min(
-              viewportRect[0],
-              viewportRect[2]
-            );
-
-
-          const y1 =
-            Math.min(
-              viewportRect[1],
-              viewportRect[3]
+              rect[1],
+              rect[3]
             );
 
 
           const width =
             Math.abs(
-              viewportRect[2] -
-              viewportRect[0]
+              rect[2] -
+              rect[0]
             );
 
 
           const height =
             Math.abs(
-              viewportRect[3] -
-              viewportRect[1]
+              rect[3] -
+              rect[1]
             );
 
 
@@ -679,11 +686,11 @@
 
 
           link.style.left =
-            x1 + "px";
+            left + "px";
 
 
           link.style.top =
-            y1 + "px";
+            top + "px";
 
 
           link.style.width =
@@ -715,15 +722,14 @@
 
 
           /*
-            Lien interne au PDF
+            Destination interne au PDF.
           */
 
           else if (
             annotation.dest
           ) {
 
-            link.href =
-              "#";
+            link.href = "#";
 
 
             link.addEventListener(
@@ -731,7 +737,6 @@
               async event => {
 
                 event.preventDefault();
-
 
                 try {
 
@@ -752,7 +757,7 @@
 
 
                     console.log(
-                      "Lien interne vers la page :",
+                      "Lien vers page PDF :",
                       pageIndex + 1
                     );
 
@@ -761,7 +766,7 @@
                 } catch (error) {
 
                   console.error(
-                    "Erreur du lien PDF :",
+                    "Erreur lien PDF :",
                     error
                   );
 
@@ -784,7 +789,7 @@
 
 
     /* =========================================
-       CHARGEMENT DES 19 PDF
+       CHARGEMENT DES PDF
        ========================================= */
 
     const pdfContainers =
@@ -795,7 +800,7 @@
 
     await Promise.all(
 
-      [...pdfContainers].map(
+      Array.from(pdfContainers).map(
         async container => {
 
           try {
@@ -807,7 +812,7 @@
           } catch (error) {
 
             console.error(
-              "Impossible de charger :",
+              "Erreur de chargement :",
               container.dataset.pdf,
               error
             );
@@ -852,9 +857,9 @@
       slides.length;
 
 
-    /*
-      Slide actuelle
-    */
+    /* =========================================
+       SLIDE ACTUELLE
+       ========================================= */
 
     function getCurrentSlide() {
 
@@ -866,9 +871,9 @@
     }
 
 
-    /*
-      Mise à jour des flèches
-    */
+    /* =========================================
+       AFFICHAGE DES FLÈCHES
+       ========================================= */
 
     function updateArrows() {
 
@@ -891,9 +896,9 @@
     }
 
 
-    /*
-      Slide suivante
-    */
+    /* =========================================
+       SLIDE SUIVANTE
+       ========================================= */
 
     function nextSlide() {
 
@@ -922,9 +927,9 @@
     }
 
 
-    /*
-      Slide précédente
-    */
+    /* =========================================
+       SLIDE PRÉCÉDENTE
+       ========================================= */
 
     function previousSlide() {
 
@@ -952,11 +957,9 @@
     }
 
 
-    /*
-      =========================
-      FLÈCHES
-      =========================
-    */
+    /* =========================================
+       CLIC SUR LES FLÈCHES
+       ========================================= */
 
     right.addEventListener(
       "click",
@@ -982,15 +985,9 @@
     );
 
 
-    /*
-      =========================
-      CLAVIER
-      =========================
-
-      Capture les flèches même
-      lorsque du texte PDF est
-      sélectionné.
-    */
+    /* =========================================
+       CLAVIER
+       ========================================= */
 
     window.addEventListener(
       "keydown",
@@ -1024,11 +1021,9 @@
     );
 
 
-    /*
-      =========================
-      SCROLL
-      =========================
-    */
+    /* =========================================
+       SCROLL
+       ========================================= */
 
     gallery.addEventListener(
       "scroll",
