@@ -18,12 +18,15 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
-      background-color: #000000;
+      background: #000;
       overflow: hidden;
     }
+
+    /* GALERIE */
 
     .gallery {
       display: flex;
@@ -42,6 +45,8 @@
     .gallery::-webkit-scrollbar {
       display: none;
     }
+
+    /* SLIDE */
 
     .slide {
       position: relative;
@@ -64,8 +69,10 @@
     .pdf-container {
       position: relative;
 
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100dvh;
+
+      flex: 0 0 100vw;
 
       display: flex;
       align-items: center;
@@ -77,44 +84,48 @@
     .pdf-page {
       position: relative;
 
-      max-width: 100%;
-      max-height: 100%;
-
       display: flex;
       align-items: center;
       justify-content: center;
+
+      flex-shrink: 0;
     }
 
     .pdf-page canvas {
       display: block;
-      max-width: 100%;
-      max-height: 100%;
     }
+
+    /* TEXTE PDF SÉLECTIONNABLE */
 
     .textLayer {
       position: absolute;
-      inset: 0;
+
+      left: 0;
+      top: 0;
 
       overflow: hidden;
-      line-height: 1;
 
+      line-height: 1;
       pointer-events: auto;
     }
 
-    .textLayer span,
-    .textLayer br {
-      color: transparent;
+    .textLayer span {
       position: absolute;
+
+      color: transparent;
+
       white-space: pre;
+
       cursor: text;
+
       transform-origin: 0% 0%;
     }
 
-    .textLayer ::selection {
+    .textLayer span::selection {
       background: rgba(0, 100, 255, 0.3);
     }
 
-    /* Flèches */
+    /* FLÈCHES */
 
     .arrow {
       position: fixed;
@@ -122,7 +133,7 @@
       top: 50%;
       transform: translateY(-50%);
 
-      z-index: 10;
+      z-index: 100;
 
       width: 90px;
       height: 130px;
@@ -147,7 +158,6 @@
         color 0.2s ease;
     }
 
-
     .arrow:hover {
       color: rgba(255, 255, 255, 1);
     }
@@ -168,88 +178,91 @@
   </style>
 </head>
 
+
 <body>
 
   <div class="gallery" id="gallery">
 
     <div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf1.pdf"></div>
-</div>
+      <div class="pdf-container" data-pdf="images/pdf1.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf2.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf2.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf3.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf3.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf4.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf4.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf5.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf5.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf6.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf6.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf7.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf7.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf8.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf8.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf9.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf9.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf10.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf10.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf11.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf11.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf12.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf12.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf13.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf13.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf14.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf14.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf15.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf15.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf16.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf16.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf17.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf17.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf18.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf18.pdf"></div>
+    </div>
 
-<div class="slide">
-  <div class="pdf-container" data-pdf="images/pdf19.pdf"></div>
-</div>
+    <div class="slide">
+      <div class="pdf-container" data-pdf="images/pdf19.pdf"></div>
+    </div>
 
   </div>
 
+
+  <!-- FLÈCHES -->
 
   <button
     class="arrow arrow-left"
@@ -266,7 +279,7 @@
   </button>
 
 
-  <!-- PDF.js -->
+  <!-- PDF.JS -->
 
   <script type="module">
 
@@ -278,52 +291,80 @@
 
 
     /*
-     * Chargement des PDF
-     */
+      CHARGEMENT D'UN PDF
+    */
 
     async function loadPDF(container) {
 
       const url = container.dataset.pdf;
 
-      const pdf = await pdfjsLib.getDocument(url).promise;
+      const pdf =
+        await pdfjsLib.getDocument(url).promise;
 
       /*
-       * On suppose une seule page par PDF.
-       */
+        Pour l'instant :
+        une page par PDF.
+      */
 
-      const page = await pdf.getPage(1);
+      const page =
+        await pdf.getPage(1);
 
-      const baseViewport = page.getViewport({
-        scale: 1
-      });
+      /*
+        Taille originale du PDF
+      */
+
+      const baseViewport =
+        page.getViewport({
+          scale: 1
+        });
+
+      /*
+        Taille disponible à l'écran
+      */
+
+      const availableWidth =
+        window.innerWidth;
+
+      const availableHeight =
+        window.innerHeight;
 
 
       /*
-       * On calcule automatiquement le zoom
-       * pour que la page entière rentre dans l'écran.
-       */
+        On calcule le facteur permettant
+        de faire tenir entièrement le PDF
+        dans l'écran.
+      */
 
-      const availableWidth = window.innerWidth;
-      const availableHeight = window.innerHeight;
+      const scaleX =
+        availableWidth /
+        baseViewport.width;
 
-      const scaleX = availableWidth / baseViewport.width;
-      const scaleY = availableHeight / baseViewport.height;
+      const scaleY =
+        availableHeight /
+        baseViewport.height;
 
-      const scale = Math.min(scaleX, scaleY);
+      const scale =
+        Math.min(
+          scaleX,
+          scaleY
+        );
 
 
-      const viewport = page.getViewport({
-        scale: scale
-      });
+      const viewport =
+        page.getViewport({
+          scale: scale
+        });
 
 
       /*
-       * Conteneur de la page
-       */
+        Conteneur de la page
+      */
 
-      const pageContainer = document.createElement("div");
+      const pageContainer =
+        document.createElement("div");
 
-      pageContainer.className = "pdf-page";
+      pageContainer.className =
+        "pdf-page";
 
       pageContainer.style.width =
         viewport.width + "px";
@@ -333,15 +374,22 @@
 
 
       /*
-       * Canvas
-       */
+        CANVAS
+      */
 
-      const canvas = document.createElement("canvas");
+      const canvas =
+        document.createElement("canvas");
 
-      const context = canvas.getContext("2d");
+      const context =
+        canvas.getContext("2d");
 
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+
+      canvas.width =
+        Math.ceil(viewport.width);
+
+      canvas.height =
+        Math.ceil(viewport.height);
+
 
       canvas.style.width =
         viewport.width + "px";
@@ -354,12 +402,14 @@
 
 
       /*
-       * Couche de texte
-       */
+        TEXTE SÉLECTIONNABLE
+      */
 
-      const textLayer = document.createElement("div");
+      const textLayer =
+        document.createElement("div");
 
-      textLayer.className = "textLayer";
+      textLayer.className =
+        "textLayer";
 
       textLayer.style.width =
         viewport.width + "px";
@@ -368,119 +418,174 @@
         viewport.height + "px";
 
 
-      pageContainer.appendChild(textLayer);
+      pageContainer.appendChild(
+        textLayer
+      );
 
-      container.appendChild(pageContainer);
+
+      container.appendChild(
+        pageContainer
+      );
 
 
       /*
-       * Rendu de la page
-       */
+        RENDU DU PDF
+      */
 
       await page.render({
+
         canvasContext: context,
+
         viewport: viewport
+
       }).promise;
 
 
       /*
-       * Texte sélectionnable
-       */
+        RÉCUPÉRATION DU TEXTE
+      */
 
       const textContent =
         await page.getTextContent();
 
-      const textLayerDiv = textLayer;
 
-      const textItems = textContent.items;
+      /*
+        Création des zones de texte
+      */
 
-      textItems.forEach(item => {
+      textContent.items.forEach(
+        item => {
 
-        const span = document.createElement("span");
+          const span =
+            document.createElement("span");
 
-        span.textContent = item.str;
+          span.textContent =
+            item.str;
 
-        const tx = pdfjsLib.Util.transform(
-          viewport.transform,
-          item.transform
-        );
 
-        const angle =
-          Math.atan2(tx[1], tx[0]);
+          const tx =
+            pdfjsLib.Util.transform(
+              viewport.transform,
+              item.transform
+            );
 
-        const fontHeight =
-          Math.sqrt(
-            tx[2] * tx[2] +
-            tx[3] * tx[3]
+
+          const angle =
+            Math.atan2(
+              tx[1],
+              tx[0]
+            );
+
+
+          const fontHeight =
+            Math.sqrt(
+              tx[2] * tx[2] +
+              tx[3] * tx[3]
+            );
+
+
+          span.style.left =
+            tx[4] + "px";
+
+          span.style.top =
+            (tx[5] - fontHeight) + "px";
+
+
+          span.style.fontSize =
+            fontHeight + "px";
+
+
+          span.style.fontFamily =
+            "sans-serif";
+
+
+          span.style.transform =
+            `rotate(${angle}rad)`;
+
+
+          textLayer.appendChild(
+            span
           );
 
-        span.style.left =
-          tx[4] + "px";
-
-        span.style.top =
-          (tx[5] - fontHeight) + "px";
-
-        span.style.fontSize =
-          fontHeight + "px";
-
-        span.style.fontFamily =
-          "sans-serif";
-
-        span.style.transform =
-          `rotate(${angle}rad)`;
-
-        textLayerDiv.appendChild(span);
-
-      });
+        }
+      );
 
     }
 
 
     /*
-     * Charger tous les PDF
-     */
+      CHARGEMENT DES 19 PDF
+    */
 
     const pdfContainers =
-      document.querySelectorAll(".pdf-container");
-
-    for (const container of pdfContainers) {
-
-      try {
-
-        await loadPDF(container);
-
-      } catch (error) {
-
-        console.error(
-          "Impossible de charger le PDF :",
-          container.dataset.pdf,
-          error
-        );
-
-      }
-
-    }
+      document.querySelectorAll(
+        ".pdf-container"
+      );
 
 
     /*
-     * Navigation
-     */
+      On charge les PDF en parallèle
+      pour éviter de bloquer la galerie.
+    */
+
+    await Promise.all(
+
+      [...pdfContainers].map(
+        async container => {
+
+          try {
+
+            await loadPDF(
+              container
+            );
+
+          } catch (error) {
+
+            console.error(
+              "Impossible de charger :",
+              container.dataset.pdf,
+              error
+            );
+
+          }
+
+        }
+      )
+
+    );
+
+
+    /*
+      NAVIGATION
+    */
 
     const gallery =
-      document.getElementById("gallery");
+      document.getElementById(
+        "gallery"
+      );
 
     const left =
-      document.getElementById("left");
+      document.getElementById(
+        "left"
+      );
 
     const right =
-      document.getElementById("right");
+      document.getElementById(
+        "right"
+      );
 
     const slides =
-      document.querySelectorAll(".slide");
+      document.querySelectorAll(
+        ".slide"
+      );
 
     const totalSlides =
       slides.length;
 
+
+    /*
+      SLIDE ACTUEL
+    */
 
     function getCurrentSlide() {
 
@@ -492,28 +597,40 @@
     }
 
 
+    /*
+      AFFICHAGE DES FLÈCHES
+    */
+
     function updateArrows() {
 
       const currentSlide =
         getCurrentSlide();
+
 
       left.classList.toggle(
         "hidden",
         currentSlide === 0
       );
 
+
       right.classList.toggle(
         "hidden",
-        currentSlide === totalSlides - 1
+        currentSlide ===
+        totalSlides - 1
       );
 
     }
 
 
+    /*
+      SLIDE SUIVANTE
+    */
+
     function nextSlide() {
 
       const currentSlide =
         getCurrentSlide();
+
 
       if (
         currentSlide <
@@ -535,12 +652,19 @@
     }
 
 
+    /*
+      SLIDE PRÉCÉDENTE
+    */
+
     function previousSlide() {
 
       const currentSlide =
         getCurrentSlide();
 
-      if (currentSlide > 0) {
+
+      if (
+        currentSlide > 0
+      ) {
 
         gallery.scrollTo({
 
@@ -558,8 +682,8 @@
 
 
     /*
-     * Flèches souris
-     */
+      CLIC SUR LES FLÈCHES
+    */
 
     right.addEventListener(
       "click",
@@ -586,19 +710,19 @@
 
 
     /*
-     * Navigation clavier
-     *
-     * Le listener est placé sur window/document
-     * et fonctionne également lorsque le texte
-     * d'un PDF est sélectionné.
-     */
+      CLAVIER
+      Le true permet de récupérer
+      les touches même lorsque le
+      texte PDF est sélectionné.
+    */
 
     window.addEventListener(
       "keydown",
-      (event) => {
+      event => {
 
         if (
-          event.key === "ArrowRight"
+          event.key ===
+          "ArrowRight"
         ) {
 
           event.preventDefault();
@@ -609,7 +733,8 @@
 
 
         if (
-          event.key === "ArrowLeft"
+          event.key ===
+          "ArrowLeft"
         ) {
 
           event.preventDefault();
@@ -624,18 +749,14 @@
 
 
     /*
-     * Mise à jour des flèches
-     */
+      MISE À JOUR DES FLÈCHES
+    */
 
     gallery.addEventListener(
       "scroll",
       updateArrows
     );
 
-    window.addEventListener(
-      "load",
-      updateArrows
-    );
 
     updateArrows();
 
