@@ -1,470 +1,644 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noé Bély — Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Noé Bély — Portfolio</title>
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    overflow: hidden;
-  }
+  <style>
 
-  .pdf-viewer {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  .gallery {
-    display: flex;
-    width: 100%;
-    height: 100dvh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-  }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      overflow: hidden;
+    }
 
-  .gallery::-webkit-scrollbar {
-    display: none;
-  }
+    .gallery {
+      display: flex;
+      width: 100%;
+      height: 100dvh;
 
-  .slide {
-    position: relative;
-    flex: 0 0 100vw;
-    width: 100vw;
-    height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    scroll-snap-align: start;
-  }
+      overflow-x: auto;
+      overflow-y: hidden;
 
-  .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
 
+      scrollbar-width: none;
+    }
 
-  /* =========================
-     BOUTONS INVISIBLES
-     ========================= */
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
 
-  .invisible-link {
-    position: absolute;
+    .slide {
+      position: relative;
 
-    bottom: 0%;
-    right: 0%;
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100dvh;
 
-    width: 50%;
-    height: 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    z-index: 5;
+      overflow: hidden;
 
-    /* Invisible */
-    background: transparent;
-    border: none;
-    outline: none;
-  }
+      scroll-snap-align: start;
+    }
 
+    /* PDF */
 
-  /* =========================
-     FLÈCHES
-     ========================= */
+    .pdf-container {
+      position: relative;
 
-  .arrow {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+      width: 100%;
+      height: 100%;
 
-    width: 90px;
-    height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      overflow: hidden;
+    }
 
-    background: transparent;
-    border: none;
+    .pdf-page {
+      position: relative;
 
-    color: rgba(255, 255, 255, 0.75);
+      max-width: 100%;
+      max-height: 100%;
 
-    font-size: 70px;
-    font-family: Arial, sans-serif;
-    font-weight: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-    cursor: pointer;
+    .pdf-page canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+    }
 
-    transition:
-      opacity 0.2s ease,
-      color 0.2s ease;
-  }
+    .textLayer {
+      position: absolute;
+      inset: 0;
 
-  .arrow:hover {
-    color: rgba(255, 255, 255, 1);
-  }
+      overflow: hidden;
+      line-height: 1;
 
-  .arrow-left {
-    left: 10px;
-  }
+      pointer-events: auto;
+    }
 
-  .arrow-right {
-    right: 10px;
-  }
+    .textLayer span,
+    .textLayer br {
+      color: transparent;
+      position: absolute;
+      white-space: pre;
+      cursor: text;
+      transform-origin: 0% 0%;
+    }
 
-  .arrow.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-</style>
+    .textLayer ::selection {
+      background: rgba(0, 100, 255, 0.3);
+    }
 
+    /* Flèches */
+
+    .arrow {
+      position: fixed;
+
+      top: 50%;
+      transform: translateY(-50%);
+
+      z-index: 10;
+
+      width: 90px;
+      height: 130px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+      border: none;
+
+      color: rgba(255, 255, 255, 0.75);
+
+      font-size: 70px;
+      font-family: Arial, sans-serif;
+      font-weight: 300;
+
+      cursor: pointer;
+
+      transition:
+        opacity 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .arrow:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .arrow-left {
+      left: 10px;
+    }
+
+    .arrow-right {
+      right: 10px;
+    }
+
+    .arrow.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+  </style>
 </head>
 
 <body>
 
   <div class="gallery" id="gallery">
 
-
-<!-- IMAGE 1 -->
-<div class="slide">
-  <img src="images/image1.jpg" alt="Projet 1">
+    <div class="slide">
+  <div class="pdf-container" data-pdf="images/pdf1.pdf"></div>
 </div>
 
-
-<!-- IMAGE 2 -->
 <div class="slide">
-  <img src="images/image2.jpg" alt="Projet 2">
+  <div class="pdf-container" data-pdf="images/pdf2.pdf"></div>
 </div>
 
-
-<!-- IMAGE 3 -->
 <div class="slide">
-  <img src="images/image3.jpg" alt="Projet 3">
-
-  <a
-    class="invisible-link"
-    href="https://youtu.be/42ciW90GyR0"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Voir le projet 3">
-  </a>
-
+  <div class="pdf-container" data-pdf="images/pdf3.pdf"></div>
 </div>
 
-
-<!-- IMAGE 4 -->
 <div class="slide">
-  <img src="images/image4.jpg" alt="Projet 4">
-
-  <a
-    class="invisible-link"
-    href="https://www.youtube.com/watch?v=TZZSyGUkfuQ"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Voir le projet 4">
-  </a>
-
+  <div class="pdf-container" data-pdf="images/pdf4.pdf"></div>
 </div>
 
-
-<!-- IMAGE 5 -->
 <div class="slide">
-  <img src="images/image5.jpg" alt="Projet 5">
-
-  <a
-    class="invisible-link"
-    href="https://filmfreeway.com/Option4"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Voir le projet 5">
-  </a>
-
+  <div class="pdf-container" data-pdf="images/pdf5.pdf"></div>
 </div>
 
-
-<!-- IMAGE 6 -->
 <div class="slide">
-  <img src="images/image6.jpg" alt="Projet 6">
+  <div class="pdf-container" data-pdf="images/pdf6.pdf"></div>
 </div>
 
-
-<!-- IMAGE 7 -->
 <div class="slide">
-  <img src="images/image7.jpg" alt="Projet 7">
+  <div class="pdf-container" data-pdf="images/pdf7.pdf"></div>
 </div>
 
-
-<!-- IMAGE 8 -->
 <div class="slide">
-  <img src="images/image8.jpg" alt="Projet 8">
+  <div class="pdf-container" data-pdf="images/pdf8.pdf"></div>
 </div>
 
-
-<!-- IMAGE 9 -->
 <div class="slide">
-  <img src="images/image9.jpg" alt="Projet 9">
+  <div class="pdf-container" data-pdf="images/pdf9.pdf"></div>
 </div>
 
-
-<!-- IMAGE 10 -->
 <div class="slide">
-  <img src="images/image10.jpg" alt="Projet 10">
+  <div class="pdf-container" data-pdf="images/pdf10.pdf"></div>
 </div>
 
-
-<!-- IMAGE 11 -->
 <div class="slide">
-  <img src="images/image11.jpg" alt="Projet 11">
+  <div class="pdf-container" data-pdf="images/pdf11.pdf"></div>
 </div>
 
-
-<!-- IMAGE 12 -->
 <div class="slide">
-  <img src="images/image12.jpg" alt="Projet 12">
+  <div class="pdf-container" data-pdf="images/pdf12.pdf"></div>
 </div>
 
-
-<!-- IMAGE 13 -->
 <div class="slide">
-  <img src="images/image13.jpg" alt="Projet 13">
+  <div class="pdf-container" data-pdf="images/pdf13.pdf"></div>
 </div>
 
-
-<!-- IMAGE 14 -->
 <div class="slide">
-  <img src="images/image14.jpg" alt="Projet 14">
+  <div class="pdf-container" data-pdf="images/pdf14.pdf"></div>
 </div>
 
-
-<!-- IMAGE 15 -->
 <div class="slide">
-  <img src="images/image15.jpg" alt="Projet 15">
+  <div class="pdf-container" data-pdf="images/pdf15.pdf"></div>
 </div>
 
-<!-- IMAGE 16 -->
 <div class="slide">
-  <img src="images/image16.jpg" alt="Projet 16">
+  <div class="pdf-container" data-pdf="images/pdf16.pdf"></div>
 </div>
 
-<!-- IMAGE 17 -->
 <div class="slide">
-  <img src="images/image17.jpg" alt="Projet 17">
-
-  <a
-    class="invisible-link"
-    href="https://youtu.be/QWAB6rJp-Zw"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Voir le projet 17">
-  </a>
-
+  <div class="pdf-container" data-pdf="images/pdf17.pdf"></div>
 </div>
 
-<!-- IMAGE 18 -->
 <div class="slide">
-  <img src="images/image18.jpg" alt="Projet 18">
+  <div class="pdf-container" data-pdf="images/pdf18.pdf"></div>
 </div>
 
-<!-- IMAGE 19 -->
 <div class="slide">
-  <iframe
-    src="images/image19.pdf#zoom=page-fit"
-    class="pdf-viewer">
-  </iframe>
+  <div class="pdf-container" data-pdf="images/pdf19.pdf"></div>
 </div>
 
   </div>
 
 
-  <!-- =========================
-       FLÈCHES
-       ========================= -->
+  <button
+    class="arrow arrow-left"
+    id="left"
+    aria-label="Image précédente">
+    ‹
+  </button>
 
-<button
- class="arrow arrow-left"
- id="left"
- aria-label="Image précédente">
-‹ </button>
-
-<button
- class="arrow arrow-right"
- id="right"
- aria-label="Image suivante">
-› </button>
+  <button
+    class="arrow arrow-right"
+    id="right"
+    aria-label="Image suivante">
+    ›
+  </button>
 
 
-<script>
+  <!-- PDF.js -->
 
-  const gallery = document.getElementById("gallery");
-  const left = document.getElementById("left");
-  const right = document.getElementById("right");
+  <script type="module">
 
-  const slides = document.querySelectorAll(".slide");
-  const totalSlides = slides.length;
+    import * as pdfjsLib from
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs";
 
-
-  /* =========================
-     POSITION ACTUELLE
-     ========================= */
-
-  function getCurrentSlide() {
-
-    return Math.round(
-      gallery.scrollLeft / gallery.clientWidth
-    );
-
-  }
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs";
 
 
-  /* =========================
-     AFFICHAGE DES FLÈCHES
-     ========================= */
+    /*
+     * Chargement des PDF
+     */
 
-  function updateArrows() {
+    async function loadPDF(container) {
 
-    const currentSlide = getCurrentSlide();
+      const url = container.dataset.pdf;
 
-    left.classList.toggle(
-      "hidden",
-      currentSlide === 0
-    );
+      const pdf = await pdfjsLib.getDocument(url).promise;
 
-    right.classList.toggle(
-      "hidden",
-      currentSlide === totalSlides - 1
-    );
+      /*
+       * On suppose une seule page par PDF.
+       */
 
-  }
+      const page = await pdf.getPage(1);
+
+      const baseViewport = page.getViewport({
+        scale: 1
+      });
 
 
-  /* =========================
-     IMAGE SUIVANTE
-     ========================= */
+      /*
+       * On calcule automatiquement le zoom
+       * pour que la page entière rentre dans l'écran.
+       */
 
-  function nextSlide() {
+      const availableWidth = window.innerWidth;
+      const availableHeight = window.innerHeight;
 
-    const currentSlide = getCurrentSlide();
+      const scaleX = availableWidth / baseViewport.width;
+      const scaleY = availableHeight / baseViewport.height;
 
-    if (currentSlide < totalSlides - 1) {
+      const scale = Math.min(scaleX, scaleY);
 
-      gallery.scrollTo({
-        left: (currentSlide + 1) * gallery.clientWidth,
-        behavior: "smooth"
+
+      const viewport = page.getViewport({
+        scale: scale
+      });
+
+
+      /*
+       * Conteneur de la page
+       */
+
+      const pageContainer = document.createElement("div");
+
+      pageContainer.className = "pdf-page";
+
+      pageContainer.style.width =
+        viewport.width + "px";
+
+      pageContainer.style.height =
+        viewport.height + "px";
+
+
+      /*
+       * Canvas
+       */
+
+      const canvas = document.createElement("canvas");
+
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      canvas.style.width =
+        viewport.width + "px";
+
+      canvas.style.height =
+        viewport.height + "px";
+
+
+      pageContainer.appendChild(canvas);
+
+
+      /*
+       * Couche de texte
+       */
+
+      const textLayer = document.createElement("div");
+
+      textLayer.className = "textLayer";
+
+      textLayer.style.width =
+        viewport.width + "px";
+
+      textLayer.style.height =
+        viewport.height + "px";
+
+
+      pageContainer.appendChild(textLayer);
+
+      container.appendChild(pageContainer);
+
+
+      /*
+       * Rendu de la page
+       */
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+
+
+      /*
+       * Texte sélectionnable
+       */
+
+      const textContent =
+        await page.getTextContent();
+
+      const textLayerDiv = textLayer;
+
+      const textItems = textContent.items;
+
+      textItems.forEach(item => {
+
+        const span = document.createElement("span");
+
+        span.textContent = item.str;
+
+        const tx = pdfjsLib.Util.transform(
+          viewport.transform,
+          item.transform
+        );
+
+        const angle =
+          Math.atan2(tx[1], tx[0]);
+
+        const fontHeight =
+          Math.sqrt(
+            tx[2] * tx[2] +
+            tx[3] * tx[3]
+          );
+
+        span.style.left =
+          tx[4] + "px";
+
+        span.style.top =
+          (tx[5] - fontHeight) + "px";
+
+        span.style.fontSize =
+          fontHeight + "px";
+
+        span.style.fontFamily =
+          "sans-serif";
+
+        span.style.transform =
+          `rotate(${angle}rad)`;
+
+        textLayerDiv.appendChild(span);
+
       });
 
     }
 
-  }
 
+    /*
+     * Charger tous les PDF
+     */
 
-  /* =========================
-     IMAGE PRÉCÉDENTE
-     ========================= */
+    const pdfContainers =
+      document.querySelectorAll(".pdf-container");
 
-  function previousSlide() {
+    for (const container of pdfContainers) {
 
-    const currentSlide = getCurrentSlide();
+      try {
 
-    if (currentSlide > 0) {
+        await loadPDF(container);
 
-      gallery.scrollTo({
-        left: (currentSlide - 1) * gallery.clientWidth,
-        behavior: "smooth"
-      });
+      } catch (error) {
 
-    }
+        console.error(
+          "Impossible de charger le PDF :",
+          container.dataset.pdf,
+          error
+        );
 
-  }
-
-
-  /* =========================
-     CLIC SUR LES FLÈCHES
-     ========================= */
-
-  right.addEventListener("click", () => {
-
-    nextSlide();
-
-    right.blur();
-
-  });
-
-
-  left.addEventListener("click", () => {
-
-    previousSlide();
-
-    left.blur();
-
-  });
-
-
-  /* =========================
-     CLAVIER ← →
-     ========================= */
-
-  document.addEventListener("keydown", (event) => {
-
-    if (event.key === "ArrowRight") {
-
-      event.preventDefault();
-
-      nextSlide();
+      }
 
     }
 
-    if (event.key === "ArrowLeft") {
 
-      event.preventDefault();
+    /*
+     * Navigation
+     */
 
-      previousSlide();
+    const gallery =
+      document.getElementById("gallery");
+
+    const left =
+      document.getElementById("left");
+
+    const right =
+      document.getElementById("right");
+
+    const slides =
+      document.querySelectorAll(".slide");
+
+    const totalSlides =
+      slides.length;
+
+
+    function getCurrentSlide() {
+
+      return Math.round(
+        gallery.scrollLeft /
+        gallery.clientWidth
+      );
 
     }
 
-  });
+
+    function updateArrows() {
+
+      const currentSlide =
+        getCurrentSlide();
+
+      left.classList.toggle(
+        "hidden",
+        currentSlide === 0
+      );
+
+      right.classList.toggle(
+        "hidden",
+        currentSlide === totalSlides - 1
+      );
+
+    }
 
 
-  /* =========================
-     MISE À JOUR DES FLÈCHES
-     ========================= */
+    function nextSlide() {
 
-  gallery.addEventListener(
-    "scroll",
-    updateArrows
-  );
+      const currentSlide =
+        getCurrentSlide();
+
+      if (
+        currentSlide <
+        totalSlides - 1
+      ) {
+
+        gallery.scrollTo({
+
+          left:
+            (currentSlide + 1) *
+            gallery.clientWidth,
+
+          behavior: "smooth"
+
+        });
+
+      }
+
+    }
 
 
-  /* =========================
-     CHARGEMENT INITIAL
-     ========================= */
+    function previousSlide() {
 
-  window.addEventListener(
-    "load",
-    updateArrows
-  );
+      const currentSlide =
+        getCurrentSlide();
 
-</script>
+      if (currentSlide > 0) {
+
+        gallery.scrollTo({
+
+          left:
+            (currentSlide - 1) *
+            gallery.clientWidth,
+
+          behavior: "smooth"
+
+        });
+
+      }
+
+    }
+
+
+    /*
+     * Flèches souris
+     */
+
+    right.addEventListener(
+      "click",
+      () => {
+
+        nextSlide();
+
+        right.blur();
+
+      }
+    );
+
+
+    left.addEventListener(
+      "click",
+      () => {
+
+        previousSlide();
+
+        left.blur();
+
+      }
+    );
+
+
+    /*
+     * Navigation clavier
+     *
+     * Le listener est placé sur window/document
+     * et fonctionne également lorsque le texte
+     * d'un PDF est sélectionné.
+     */
+
+    window.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "ArrowRight"
+        ) {
+
+          event.preventDefault();
+
+          nextSlide();
+
+        }
+
+
+        if (
+          event.key === "ArrowLeft"
+        ) {
+
+          event.preventDefault();
+
+          previousSlide();
+
+        }
+
+      },
+      true
+    );
+
+
+    /*
+     * Mise à jour des flèches
+     */
+
+    gallery.addEventListener(
+      "scroll",
+      updateArrows
+    );
+
+    window.addEventListener(
+      "load",
+      updateArrows
+    );
+
+    updateArrows();
+
+  </script>
 
 </body>
 </html>
