@@ -93,22 +93,17 @@
       flex: 0 0 auto;
 
       overflow: hidden;
-
-      display: block;
     }
 
     .pdf-page canvas {
       display: block;
-
-      width: 100%;
-      height: 100%;
 
       margin: 0;
       padding: 0;
     }
 
     /* =========================
-       TEXTE PDF SÉLECTIONNABLE
+       TEXT LAYER PDF.JS
        ========================= */
 
     .textLayer {
@@ -116,21 +111,29 @@
 
       left: 0;
       top: 0;
-
-      width: 100%;
-      height: 100%;
+      right: 0;
+      bottom: 0;
 
       overflow: hidden;
 
       line-height: 1;
 
+      text-align: initial;
+
+      forced-color-adjust: none;
+
+      transform-origin: 0 0;
+
+      z-index: 2;
+
       pointer-events: auto;
     }
 
-    .textLayer span {
-      position: absolute;
-
+    .textLayer span,
+    .textLayer br {
       color: transparent;
+
+      position: absolute;
 
       white-space: pre;
 
@@ -152,9 +155,10 @@
 
       left: 0;
       top: 0;
+      right: 0;
+      bottom: 0;
 
-      width: 100%;
-      height: 100%;
+      z-index: 3;
 
       pointer-events: none;
     }
@@ -162,9 +166,9 @@
     .annotationLayer a {
       position: absolute;
 
-      pointer-events: auto;
-
       display: block;
+
+      pointer-events: auto;
 
       cursor: pointer;
 
@@ -339,26 +343,36 @@
 
   <script type="module">
 
-    import * as pdfjsLib from
+    import {
+      getDocument,
+      GlobalWorkerOptions,
+      TextLayer,
+      Util
+    } from
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs";
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
+
+    GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs";
 
 
     /* =========================================
-       CHARGER UN PDF
+       CHARGEMENT D'UN PDF
        ========================================= */
 
     async function loadPDF(container) {
 
-      const url = container.dataset.pdf;
+      const url =
+        container.dataset.pdf;
+
 
       const pdf =
-        await pdfjsLib.getDocument(url).promise;
+        await getDocument(url).promise;
+
 
       /*
-        Une seule page par PDF.
+        On utilise la première page
+        de chaque PDF.
       */
 
       const page =
@@ -366,7 +380,7 @@
 
 
       /*
-        Dimensions originales
+        Taille originale du PDF
       */
 
       const baseViewport =
@@ -376,7 +390,7 @@
 
 
       /*
-        Dimensions disponibles
+        Taille disponible à l'écran
       */
 
       const availableWidth =
@@ -387,8 +401,9 @@
 
 
       /*
-        Calcul du zoom pour que
-        toute la page soit visible.
+        Calcul du zoom.
+        Le PDF tient entièrement
+        dans l'écran.
       */
 
       const scaleX =
@@ -407,6 +422,13 @@
         );
 
 
+      /*
+        IMPORTANT :
+        exactement le même viewport
+        est utilisé pour le canvas
+        ET pour la TextLayer.
+      */
+
       const viewport =
         page.getViewport({
           scale: scale
@@ -423,49 +445,53 @@
       pageContainer.className =
         "pdf-page";
 
+
       pageContainer.style.width =
-        Math.floor(viewport.width) + "px";
+        Math.ceil(viewport.width) + "px";
+
 
       pageContainer.style.height =
-        Math.floor(viewport.height) + "px";
+        Math.ceil(viewport.height) + "px";
 
 
       /*
+        =========================
         CANVAS
+        =========================
       */
 
       const canvas =
         document.createElement("canvas");
 
+
       const context =
         canvas.getContext("2d");
 
 
-      /*
-        On arrondit les dimensions
-        pour éviter le petit trait
-        blanc sur le côté.
-      */
-
-      const canvasWidth =
-        Math.ceil(viewport.width);
-
-      const canvasHeight =
-        Math.ceil(viewport.height);
+      const outputScale =
+        window.devicePixelRatio || 1;
 
 
       canvas.width =
-        canvasWidth;
+        Math.ceil(
+          viewport.width *
+          outputScale
+        );
+
 
       canvas.height =
-        canvasHeight;
+        Math.ceil(
+          viewport.height *
+          outputScale
+        );
 
 
       canvas.style.width =
-        canvasWidth + "px";
+        Math.ceil(viewport.width) + "px";
+
 
       canvas.style.height =
-        canvasHeight + "px";
+        Math.ceil(viewport.height) + "px";
 
 
       pageContainer.appendChild(
@@ -474,27 +500,33 @@
 
 
       /*
-        COUCHE TEXTE
+        =========================
+        TEXT LAYER
+        =========================
       */
 
-      const textLayer =
+      const textLayerDiv =
         document.createElement("div");
 
-      textLayer.className =
+
+      textLayerDiv.className =
         "textLayer";
 
 
       pageContainer.appendChild(
-        textLayer
+        textLayerDiv
       );
 
 
       /*
-        COUCHE LIENS / ANNOTATIONS
+        =========================
+        ANNOTATION LAYER
+        =========================
       */
 
       const annotationLayer =
         document.createElement("div");
+
 
       annotationLayer.className =
         "annotationLayer";
@@ -506,7 +538,8 @@
 
 
       /*
-        Ajout dans la page
+        Ajout de la page
+        dans la slide.
       */
 
       container.appendChild(
@@ -515,92 +548,71 @@
 
 
       /*
-        RENDU DU PDF
+        =========================
+        RENDU CANVAS
+        =========================
       */
 
-      await page.render({
+      const renderContext = {
 
-        canvasContext: context,
+        canvasContext:
+          context,
 
-        viewport: viewport
+        viewport:
+          viewport,
 
-      }).promise;
+        transform:
+          outputScale !== 1
+            ? [
+                outputScale,
+                0,
+                0,
+                outputScale,
+                0,
+                0
+              ]
+            : null
+
+      };
+
+
+      await page.render(
+        renderContext
+      ).promise;
 
 
       /*
-        ==============================
-        TEXTE
-        ==============================
+        =========================
+        RENDU TEXT LAYER
+        =========================
       */
 
       const textContent =
         await page.getTextContent();
 
 
-      textContent.items.forEach(
-        item => {
+      const textLayer =
+        new TextLayer({
 
-          const span =
-            document.createElement("span");
+          textContentSource:
+            textContent,
 
+          container:
+            textLayerDiv,
 
-          span.textContent =
-            item.str;
+          viewport:
+            viewport
 
-
-          const tx =
-            pdfjsLib.Util.transform(
-              viewport.transform,
-              item.transform
-            );
+        });
 
 
-          const angle =
-            Math.atan2(
-              tx[1],
-              tx[0]
-            );
-
-
-          const fontHeight =
-            Math.sqrt(
-              tx[2] * tx[2] +
-              tx[3] * tx[3]
-            );
-
-
-          span.style.left =
-            tx[4] + "px";
-
-
-          span.style.top =
-            (tx[5] - fontHeight) + "px";
-
-
-          span.style.fontSize =
-            fontHeight + "px";
-
-
-          span.style.fontFamily =
-            "sans-serif";
-
-
-          span.style.transform =
-            `rotate(${angle}rad)`;
-
-
-          textLayer.appendChild(
-            span
-          );
-
-        }
-      );
+      await textLayer.render();
 
 
       /*
-        ==============================
-        LIENS DU PDF
-        ==============================
+        =========================
+        LIENS PDF
+        =========================
       */
 
       const annotations =
@@ -610,12 +622,6 @@
       annotations.forEach(
         annotation => {
 
-          /*
-            On ne crée un lien que
-            pour les annotations qui
-            possèdent une destination.
-          */
-
           if (
             annotation.subtype !==
             "Link"
@@ -624,17 +630,47 @@
           }
 
 
+          /*
+            Coordonnées du lien
+          */
+
           const rect =
-            pdfjsLib.Util.normalizeRect(
+            Util.normalizeRect(
               annotation.rect
             );
 
 
-          const [x1, y1, x2, y2] =
-            pdfjsLib.Util.normalizeRect(
-              viewport.convertToViewportRectangle(
-                rect
-              )
+          const viewportRect =
+            viewport.convertToViewportRectangle(
+              rect
+            );
+
+
+          const x1 =
+            Math.min(
+              viewportRect[0],
+              viewportRect[2]
+            );
+
+
+          const y1 =
+            Math.min(
+              viewportRect[1],
+              viewportRect[3]
+            );
+
+
+          const width =
+            Math.abs(
+              viewportRect[2] -
+              viewportRect[0]
+            );
+
+
+          const height =
+            Math.abs(
+              viewportRect[3] -
+              viewportRect[1]
             );
 
 
@@ -643,19 +679,19 @@
 
 
           link.style.left =
-            Math.min(x1, x2) + "px";
+            x1 + "px";
 
 
           link.style.top =
-            Math.min(y1, y2) + "px";
+            y1 + "px";
 
 
           link.style.width =
-            Math.abs(x2 - x1) + "px";
+            width + "px";
 
 
           link.style.height =
-            Math.abs(y2 - y1) + "px";
+            height + "px";
 
 
           /*
@@ -679,9 +715,7 @@
 
 
           /*
-            Certains PDF utilisent
-            une destination au lieu
-            d'une URL directe.
+            Lien interne au PDF
           */
 
           else if (
@@ -691,11 +725,13 @@
             link.href =
               "#";
 
+
             link.addEventListener(
               "click",
               async event => {
 
                 event.preventDefault();
+
 
                 try {
 
@@ -703,6 +739,7 @@
                     await pdf.getDestination(
                       annotation.dest
                     );
+
 
                   if (
                     destination
@@ -713,19 +750,10 @@
                         destination[0]
                       );
 
-                    const targetPage =
-                      pageIndex + 1;
-
-                    /*
-                      Si le PDF contient
-                      plusieurs pages, on
-                      pourrait ici gérer
-                      la navigation interne.
-                    */
 
                     console.log(
-                      "Destination PDF :",
-                      targetPage
+                      "Lien interne vers la page :",
+                      pageIndex + 1
                     );
 
                   }
@@ -733,7 +761,7 @@
                 } catch (error) {
 
                   console.error(
-                    "Erreur lien PDF :",
+                    "Erreur du lien PDF :",
                     error
                   );
 
@@ -756,7 +784,7 @@
 
 
     /* =========================================
-       CHARGEMENT DES PDF
+       CHARGEMENT DES 19 PDF
        ========================================= */
 
     const pdfContainers =
@@ -839,7 +867,7 @@
 
 
     /*
-      Flèches
+      Mise à jour des flèches
     */
 
     function updateArrows() {
@@ -884,7 +912,8 @@
             (currentSlide + 1) *
             gallery.clientWidth,
 
-          behavior: "smooth"
+          behavior:
+            "smooth"
 
         });
 
@@ -913,7 +942,8 @@
             (currentSlide - 1) *
             gallery.clientWidth,
 
-          behavior: "smooth"
+          behavior:
+            "smooth"
 
         });
 
@@ -923,7 +953,9 @@
 
 
     /*
-      CLIC FLÈCHES
+      =========================
+      FLÈCHES
+      =========================
     */
 
     right.addEventListener(
@@ -951,7 +983,13 @@
 
 
     /*
+      =========================
       CLAVIER
+      =========================
+
+      Capture les flèches même
+      lorsque du texte PDF est
+      sélectionné.
     */
 
     window.addEventListener(
@@ -987,7 +1025,9 @@
 
 
     /*
-      MISE À JOUR
+      =========================
+      SCROLL
+      =========================
     */
 
     gallery.addEventListener(
